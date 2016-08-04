@@ -34,11 +34,6 @@ main(){
         printf("%d\n",top);
     }//有時候可以compile成功，有時候會失敗
     //然後現在都成功了???????????????
-
-
-
-
-
 }
 bool IsEmpty(int top){//detect if the stack is empty
     if(top<0){
