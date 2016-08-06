@@ -29,7 +29,7 @@ main(){
     element test;
     test.key=1;
     int i=0;
-    for(i=0;i<10;i++){
+    for(i=0;i<1000;i++){
         push(test);
         printf("%d\n",top);
     }//有時候可以compile成功，有時候會失敗
