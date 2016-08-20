@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_QUEUE_SIZE 100 /* maximum queue size */
+#define MAX_QUEUE_SIZE 8 /* maximum queue size */
 //global variance
 typedef struct{
     int key;
@@ -30,8 +30,20 @@ main(){
     element test;
     test.key=1;
 
-    addq(test);
-    deleteq();
+    int i=0;
+    for(i=0;i<7;i++){
+        addq(test);
+    }
+    for(i=0;i<3;i++){
+        deleteq(test);
+    }
+    for(i=0;i<3;i++){
+        addq(test);
+    }
+
+
+
+
     printf("front:%d\n",front);
     printf("rear:%d\n",rear);
 
@@ -60,7 +72,7 @@ void queueFull(){
 void addq(element item){
     /* add an item to the queue */
     rear=(rear+1)%MAX_QUEUE_SIZE;//make it circular
-    if(rear==MAX_QUEUE_SIZE-1){
+    if(rear==front){
         queueFull();/* print error and exit */
     }
     queue[rear]=item;
