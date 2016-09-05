@@ -58,6 +58,7 @@ void insert(listPointer *first,listPointer x,int data){//insert a node with data
         *first=temp;
         printf("\ntest>>else");
     }//這裡的*first 與main裡的first為同義   *first(in the insert function) ===  first(in the main function)
+    //畫圖可以很容易理解這裡的概念
 }
 void delete(listPointer *first,listPointer trail,listPointer x){
     /* delete x from the list , trail is the preceding node and *first is the front of the list */
