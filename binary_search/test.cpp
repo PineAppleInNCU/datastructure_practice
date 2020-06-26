@@ -1,6 +1,6 @@
 // https://labuladong.gitbook.io/algo/di-ling-zhang-bi-du-xi-lie/er-fen-cha-zhao-xiang-jie
 // 看這個教學的測試程式碼
-// leetcode 704 可以測試自己的算法
+// leetcode 704, 34 可以測試自己的算法
 //
 // 這篇文章把所有可能遇到的情況都條列出來，並仔細深究
 // 這樣的方法與心態值得學習
@@ -71,7 +71,7 @@ int close_binarySearch_v2(vector<int>& nums, int target) {
     mid = left + (right - left) / 2;
 
     if(nums[mid] > target) {
-      right = mid - 1;
+      right = mid;
     } else if(nums[mid] < target) {
       left = mid + 1;
     } else {
@@ -95,7 +95,7 @@ int left_binarySearch(vector<int>& nums, int target) {
     mid = left + (right - left) / 2;
 
     if(nums[mid] > target) {
-      right = mid - 1;
+      right = mid;
     } else if(nums[mid] < target) {
       left = mid + 1;
     } else {
@@ -119,7 +119,7 @@ int left_binarySearch_v2(vector<int>& nums, int target) {
     mid = left + (right - left) / 2;
 
     if(nums[mid] > target) {
-      right = mid - 1;
+      right = mid;
     } else if(nums[mid] < target) {
       left = mid + 1;
     } else {
@@ -173,9 +173,85 @@ int left_binarySearch_v3(vector<int>& nums, int target) {
 
 }
 
-// 7. right - open interval
+// 7. right - open interval - wrong
+int right_binarySearch(vector<int>& nums, int target) {
+  int left = 0;
+  int right = nums.size();
+  int mid;
 
-// 8. right - close interval
+  // [left, right)
+  while(left < right) {
+    mid = left + (right - left) / 2;
+
+    if(nums[mid] > target) {
+      right = mid;
+    } else if(nums[mid] < target) {
+      left = mid + 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+
+  // 這並不是解答，而是回傳在這個陣列裡，總共有多少值小於等於 target 
+  return left;
+}
+
+// 8. right - open interval - the good one
+int right_binarySearch_v2(vector<int>& nums, int target) {
+  int left = 0;
+  int right = nums.size();
+  int mid;
+
+  // [left, right)
+  while(left < right) {
+    mid = left + (right - left) / 2;
+
+    if(nums[mid] > target) {
+      right = mid;
+    } else if(nums[mid] < target) {
+      left = mid + 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+
+  if(left == 0) return -1;
+  return nums[left - 1] == target ? left - 1 : -1;
+}
+
+
+// 9. right - close interval
+int right_binarySearch_v3(vector<int>& nums, int target) {
+  int left = 0;
+  int right = nums.size() - 1;
+  int mid;
+
+  while(left <= right) {
+    mid = (left + right) / 2;
+    
+    if(nums[mid] > target) {
+      right = mid - 1;
+    } else if(nums[mid] < target) {
+      left = mid + 1;
+    } else {
+      left = mid + 1;
+    } 
+
+  }
+
+  /* 我寫的，應該是錯了
+  if(left == 0) return -1;
+  return nums[left - 1] == target ? left - 1 : -1;   
+  */
+ 
+  if(right < 0 || nums[right] != target) {
+    return -1;
+  }
+  return right;
+
+
+
+}
 
 int main() {
 
@@ -195,6 +271,9 @@ int main() {
   cout << left_binarySearch(nums, 15) << endl;
   cout << left_binarySearch_v2(nums, 15) << endl;
   cout << left_binarySearch_v3(nums, 15) << endl;
+  cout << right_binarySearch(nums, 15) << endl;
+  cout << right_binarySearch_v2(nums, 15) << endl;
+  cout << right_binarySearch_v3(nums, 15) << endl;
 
   printf("\n\n\n");
 
@@ -205,6 +284,9 @@ int main() {
   cout << left_binarySearch(nums, 5) << endl;
   cout << left_binarySearch_v2(nums, 5) << endl;
   cout << left_binarySearch_v3(nums, 5) << endl;
+  cout << right_binarySearch(nums, 5) << endl;
+  cout << right_binarySearch_v2(nums, 5) << endl;
+  cout << right_binarySearch_v3(nums, 5) << endl;
 
 
   return 0;
