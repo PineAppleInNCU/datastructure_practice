@@ -1,5 +1,7 @@
 // 題目網址：https://practice.geeksforgeeks.org/problems/longest-common-substring/0
-// time : O(N^2), 
+// time : O(N^2),
+// space : O(1) 
+// 來源 ： 我
 
 #include <iostream>
 #include <cstdlib>

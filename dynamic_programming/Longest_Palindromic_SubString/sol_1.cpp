@@ -1,4 +1,7 @@
 // time : O(N^2)
+// space : O(1)
+// 來源：自己
+// 跟 https://www.geeksforgeeks.org/longest-palindromic-substring-set-2/ 應該是相同意思
 
 class Solution {
 public:
