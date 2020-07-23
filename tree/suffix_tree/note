@@ -3,3 +3,9 @@ generalized suffix tree 是指使用多個字串形成單一一個 suffix tree �
 
 https://en.wikipedia.org/wiki/Ukkonen%27s_algorithm
 suffix tree 是一個資料結構，而 Ukkonen's algorithm 則是一種用來構造 suffix tree 的算法
+
+https://www.geeksforgeeks.org/ukkonens-suffix-tree-construction-part-1/
+想要從 geeksforgeeks 的文章來學習何謂 suffix tree ，應該要由這一篇開始看
+
+http://web.stanford.edu/~mjkay/gusfield.pdf
+介紹 Ukkonens algorithms
