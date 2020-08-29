@@ -81,7 +81,7 @@ void print_graph(graph *g) {
   int i;
   edgenode *p;
 
-  for(i = 1;i < g->nvertices;i++) {
+  for(i = 0;i < g->nvertices;i++) {
     printf("%d : ", i);
     p = g->edges[i];
     while(p != NULL) {
@@ -96,7 +96,81 @@ bool processed[MAXV + 1];
 bool discovered[MAXV + 1];
 int parent[MAXV + 1];
 
+enum TEST{
+  FALSE,
+  TRUE
+};
 
+
+void initialize_search(graph *g) {
+  int i;
+
+  for(i = 0;i <= g->nvertices;i++) {
+    processed[i] = discovered[i] = FALSE;
+    parent[i] = -1;
+  }
+}
+
+void process_vertex_late(int v) {
+
+}
+
+void process_vertex_early(int v) {
+  printf("processed vertex %d\n", v);
+}
+
+void process_edge(int x, int y) {
+  printf("processed edge (%d %d)\n", x, y);
+}
+
+
+void bfs(graph *g, int start) {
+  queue<int> q;
+  int v;
+  int y;
+  edgenode *p;
+
+  q.push(start);
+  discovered[start] = TRUE;
+  
+  while(!q.empty()) {
+    v = q.front();
+    q.pop();  
+ 
+    process_vertex_early(v);
+
+    processed[v] = TRUE;
+    p = g->edges[v];
+    while(p != NULL) {
+      y = p->y;
+      if((processed[y] == FALSE) || g->directed) {
+        process_edge(v, y);
+      }
+      if(discovered[y] == FALSE) {
+        q.push(y);
+	discovered[y] = TRUE;
+	parent[y] = v;
+      }
+      p = p->next;
+    }
+    process_vertex_late(v);
+  }
+}
+
+void find_path(int start, int end, int parents[]) {
+
+
+  if((start == end) || (end == -1)) {
+    if(end == -1) {
+      printf("\ncannot find start value\n");
+    } else {
+      printf("\n%d", start);
+    }
+  } else {
+    find_path(start, parents[end], parents);
+    printf(" %d", end);
+  }
+}
 
 int main() {
   
@@ -105,8 +179,12 @@ int main() {
   print_graph(g);
 
 
+  printf("start to BFS\n");
+  initialize_search(g);
 
+  bfs(g, 0);
 
+  find_path(-1, 2, parent); 
 
   return 0;
 }
