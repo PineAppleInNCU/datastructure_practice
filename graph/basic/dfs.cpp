@@ -77,6 +77,10 @@ void read_graph(graph *g, bool directed) {
 
 }
 
+void finding_cycles_undirected() {
+  // TODO !
+}
+
 void print_graph(graph *g) {
   int i;
   edgenode *p;
@@ -92,15 +96,18 @@ void print_graph(graph *g) {
   }
 }
 
-bool processed[MAXV + 1];
-bool discovered[MAXV + 1];
-int parent[MAXV + 1];
-
 enum TEST{
   FALSE,
   TRUE
 };
 
+bool processed[MAXV + 1];
+bool discovered[MAXV + 1];
+int entry_time[MAXV + 1];
+int exit_time[MAXV + 1];
+int parent[MAXV + 1];
+int now_time;
+int finished = FALSE;
 
 void initialize_search(graph *g) {
   int i;
@@ -108,53 +115,61 @@ void initialize_search(graph *g) {
   for(i = 0;i <= g->nvertices;i++) {
     processed[i] = discovered[i] = FALSE;
     parent[i] = -1;
+    entry_time[i] = -1;
+    exit_time[i] = -1;
   }
+
+  now_time = 0;
+
 }
 
 void process_vertex_late(int v) {
-
+  printf("[process late] processed vertex %d\n", v);
 }
 
 void process_vertex_early(int v) {
-  printf("processed vertex %d\n", v);
+  printf("[process early] processed vertex %d\n", v);
 }
 
 void process_edge(int x, int y) {
-  printf("processed edge (%d %d)\n", x, y);
+  printf("[process] processed edge (%d %d)\n", x, y);
 }
 
 
-void bfs(graph *g, int start) {
-  queue<int> q;
-  int v;
-  int y;
+void dfs(graph *g, int v) {
   edgenode *p;
+  int y;
 
-  q.push(start);
-  discovered[start] = TRUE;
-  
-  while(!q.empty()) {
-    v = q.front();
-    q.pop();  
- 
-    process_vertex_early(v);
+  if (finished) return;
 
-    processed[v] = TRUE;
-    p = g->edges[v];
-    while(p != NULL) {
-      y = p->y;
-      if((processed[y] == FALSE) || g->directed) {
-        process_edge(v, y);
-      }
-      if(discovered[y] == FALSE) {
-        q.push(y);
-	discovered[y] = TRUE;
-	parent[y] = v;
-      }
-      p = p->next;
+  discovered[v] = TRUE;
+  now_time = now_time + 1;
+  entry_time[v] = now_time; 
+
+  process_vertex_early(v);
+
+  p = g->edges[v];
+  while( p != NULL) {
+    y = p->y;
+    if(discovered[y] == FALSE) {
+      parent[y] = v;
+      process_edge(v, y);
+      dfs(g, y);
+    } else if((!processed[y]) || (g->directed)) {
+      process_edge(v, y);
     }
-    process_vertex_late(v);
+
+    if (finished) return;
+    p = p->next;
   }
+
+  process_vertex_late(v);
+
+  now_time = now_time + 1;
+  exit_time[v] = now_time;
+  
+  processed[v] = TRUE;
+
 }
 
 
@@ -180,12 +195,12 @@ int main() {
   print_graph(g);
 
 
-  printf("start to BFS\n");
+  printf("start to DFS\n");
   initialize_search(g);
 
-  bfs(g, 0);
+  dfs(g, 0);
 
-  find_path(-1, 2, parent); 
+  //find_path(-1, 2, parent); 
 
   return 0;
 }
