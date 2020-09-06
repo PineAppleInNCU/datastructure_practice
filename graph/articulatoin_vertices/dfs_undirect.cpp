@@ -208,7 +208,7 @@ void process_edge(int x, int y) {
   } else if(edge_type == TREE) {
     tree_out_degree[x] += 1;
     printf("tree out degree[%d]++\n", x);
-  } else if(edge_type == BACK) {
+  } else if(edge_type == BACK && parent[x] != y /* 我一定想不到這一步，就是父母節點並不算在 reachable_ancestor 裡。這也算是蠻重要的一步 */) {
     if(entry_time[y] < entry_time[reachable_ancestor[x]]) {
       reachable_ancestor[x] = y;
       processed[y] = TRUE;
