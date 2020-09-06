@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <vector>
 #include <queue>
+#include <assert.h>
 
 #define MAXV 1000
 //#define UNDISCOVERED 0
@@ -77,10 +78,6 @@ void read_graph(graph *g, bool directed) {
 
 }
 
-void finding_cycles_undirected() {
-  // TODO !
-}
-
 void print_graph(graph *g) {
   int i;
   edgenode *p;
@@ -123,6 +120,23 @@ void initialize_search(graph *g) {
 
 }
 
+
+void find_path(int start, int end, int parents[]) {
+
+
+  if((start == end) || (end == -1)) {
+    if(end == -1) {
+      printf("\ncannot find start value\n");
+    } else {
+      printf("\n%d", start);
+    }
+  } else {
+    find_path(start, parents[end], parents);
+    printf(" %d", end);
+  }
+}
+
+
 void process_vertex_late(int v) {
   printf("[process late] processed vertex %d\n", v);
 }
@@ -132,7 +146,19 @@ void process_vertex_early(int v) {
 }
 
 void process_edge(int x, int y) {
+  // x -> y
+  // 當 x 碰到 y ， 而且 y 不是 x 的 parents 的話，
+
   printf("[process] processed edge (%d %d)\n", x, y);
+  //if(parent[y] != x && parent[x] != y) {
+  if(parent[x] != y && discovered[y] == TRUE){
+    // it's a back edge
+    printf("find a back edge (the next vertex is discovered , and the next vertex is not my parents): fron %d to %d\n", x, y);
+    printf("Cycle from %d to %d : ", y, x);
+    find_path(y, x, parent);
+    printf("\n\n");
+    finished = TRUE;
+  }
 }
 
 
@@ -154,10 +180,13 @@ void dfs(graph *g, int v) {
     if(discovered[y] == FALSE) {
       parent[y] = v;
       process_edge(v, y);
-      dfs(g, y);
+      discovered[y] = TRUE;
+      dfs(g, y);  
     } else if((!processed[y]) || (g->directed)) {
       process_edge(v, y);
-    }
+    } else {
+      assert(0);
+    } 
 
     if (finished) return;
     p = p->next;
@@ -172,21 +201,6 @@ void dfs(graph *g, int v) {
 
 }
 
-
-void find_path(int start, int end, int parents[]) {
-
-
-  if((start == end) || (end == -1)) {
-    if(end == -1) {
-      printf("\ncannot find start value\n");
-    } else {
-      printf("\n%d", start);
-    }
-  } else {
-    find_path(start, parents[end], parents);
-    printf(" %d", end);
-  }
-}
 
 int main() {
   
